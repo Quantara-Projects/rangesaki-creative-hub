@@ -7,7 +7,7 @@ const ExternalLinksSection = () => {
       name: "Fiverr",
       description: "Hire me for professional projects and custom commissions",
       icon: Briefcase,
-      url: "https://fiverr.com/",
+      url: "https://www.fiverr.com/users/ram_magdalaga/",
       available: true,
       color: "bg-green-500"
     },
@@ -15,17 +15,18 @@ const ExternalLinksSection = () => {
       name: "LinkedIn",
       description: "Connect with me on professional network",
       icon: Linkedin,
-      url: "#",
-      available: false,
+      url: "https://www.linkedin.com/in/ram-mitchell-magdalaga-919188385",
+      available: true,
       color: "bg-blue-600"
     },
     {
       name: "Discord",
       description: "Direct communication and quick support",
       icon: MessageCircle,
-      url: "https://discord.com/",
-      available: true,
-      color: "bg-indigo-500"
+      url: "#",
+      available: false,
+      color: "bg-indigo-500",
+      username: "@rangesaki"
     }
   ];
 
@@ -69,6 +70,15 @@ const ExternalLinksSection = () => {
                     <ExternalLink className="w-4 h-4 mr-2" />
                     Visit {link.name}
                   </Button>
+                ) : link.username ? (
+                  <div className="text-center p-3 bg-accent/50 rounded-lg border">
+                    <p className="text-foreground font-semibold text-lg">
+                      {link.username}
+                    </p>
+                    <p className="text-muted-foreground text-xs mt-1">
+                      Add me on Discord
+                    </p>
+                  </div>
                 ) : (
                   <Button 
                     variant="outline" 

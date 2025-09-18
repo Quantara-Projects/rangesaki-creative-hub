@@ -1,10 +1,18 @@
 import { Code, Palette, Video, Globe } from "lucide-react";
+import avatarImage from "@/assets/rangesaki-avatar.png";
 
 const HeroSection = () => {
   return (
     <section id="about" className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center animate-fade-in-up">
+          <div className="mb-8">
+            <img 
+              src={avatarImage} 
+              alt="RangeSaki Avatar" 
+              className="w-32 h-32 md:w-40 md:h-40 mx-auto rounded-full shadow-elegant border-4 border-primary/20"
+            />
+          </div>
           <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
             Hi, I'm{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary-glow">
