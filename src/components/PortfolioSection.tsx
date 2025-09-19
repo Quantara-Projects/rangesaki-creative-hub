@@ -1,56 +1,53 @@
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import rangeSakiAvatar from "@/assets/rangesaki-avatar.png";
 
 const PortfolioSection = () => {
   const portfolioItems = [
     {
       id: 1,
-      title: "Advanced Game Mechanics",
-      category: "Roblox Scripting",
-      description: "Complex combat system with skill trees, progression mechanics, and real-time multiplayer synchronization.",
-      image: "/placeholder.svg",
-      tags: ["Lua", "RemoteEvents", "DataStore"]
+      title: "Build Core",
+      category: "Scripter",
+      description:
+        "I am proud to be part of a team of skilled developers and designers who craft innovative Roblox experiences that push the boundaries of interactive entertainment.",
+      image:
+        "https://tr.rbxcdn.com/180DAY-677f61a9a5f262fc0be1757aaf2d67d9/150/150/Image/Webp/noFilter",
+      tags: ["Game Developer"],
+      link: "https://www.roblox.com/communities/794835887/Build-Core#!/about",
     },
     {
       id: 2,
-      title: "Modern UI Dashboard",
-      category: "UI Design",
-      description: "Sleek inventory management system with drag-and-drop functionality and smooth animations.",
-      image: "/placeholder.svg",
-      tags: ["TweenService", "UserInput", "Responsive"]
+      title: "Silence [HORROR]",
+      category: "Roblox Scripting",
+      description:
+        "Silence is a gripping stealth horror game where noise is your greatest enemy. (Still in development)",
+      image: "https://t1.rbxcdn.com/180DAY-72e3bf7380cc3afa336d930623036561",
+      tags: ["Lua", "RemoteEvents", "DataStore", "Game Systems"],
+      link: "https://www.roblox.com/games/101604490759494/Silence-HORROR",
+      status: "development",
     },
     {
       id: 3,
-      title: "Cinematic Story Sequence",
-      category: "Cutscenes",
-      description: "Epic opening cutscene with camera movements, lighting effects, and synchronized audio.",
-      image: "/placeholder.svg",
-      tags: ["CameraManipulation", "Lighting", "Audio"]
+      title: "Viking Tycoon",
+      category: "Roblox Game",
+      description:
+        "Epic opening cutscene with camera movements, lighting effects, and synchronized audio.",
+      image:
+        "https://tr.rbxcdn.com/180DAY-1ebc8a6fdbda7c01598cc502c2bc52fe/768/432/Image/Webp/noFilter",
+      tags: ["Cutscenes", "Lighting", "Audio", "VFX", "Unique Gameplay"],
+      link: "",
+      status: "development",
     },
     {
       id: 4,
-      title: "Professional Portfolio",
+      title: "RangeSaki Portfolio",
       category: "Web Development",
-      description: "Responsive portfolio website built with modern web technologies and smooth animations.",
-      image: "/placeholder.svg",
-      tags: ["React", "TypeScript", "Tailwind CSS"]
+      description:
+        "This portfolio serves as a curated showcase of my ability to design and develop custom, user-centric websites—such as professional portfolios or personal bios—while emphasizing clean aesthetics, intuitive navigation, and technical precision.",
+      image: rangeSakiAvatar,
+      tags: ["React", "TypeScript", "Tailwind CSS"],
+      link: "https://rangesaki.netlify.app/",
     },
-    {
-      id: 5,
-      title: "Trading System",
-      category: "Game Systems",
-      description: "Secure player-to-player trading system with verification and transaction logging.",
-      image: "/placeholder.svg",
-      tags: ["Security", "DataStore", "UI"]
-    },
-    {
-      id: 6,
-      title: "Bio Link Website",
-      category: "Web Development",
-      description: "Clean, minimalist bio website with social links and contact integration.",
-      image: "/placeholder.svg",
-      tags: ["HTML", "CSS", "JavaScript"]
-    }
   ];
 
   return (
@@ -61,36 +58,57 @@ const PortfolioSection = () => {
             My Work
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Explore my portfolio of Roblox projects, UI designs, and web development work
+            Explore my portfolio of Roblox projects, UI designs, and web
+            development work
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {portfolioItems.map((item, index) => (
-            <div 
-              key={item.id} 
+            <div
+              key={item.id}
               className="portfolio-card animate-fade-in-up"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="aspect-video bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg mb-4 flex items-center justify-center">
-                <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center">
-                  <ExternalLink className="w-8 h-8 text-primary" />
+              {item.image && item.image !== "/placeholder.svg" ? (
+                <div className="aspect-video rounded-lg mb-4 overflow-hidden">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-              </div>
-              
+              ) : (
+                <div className="aspect-video bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg mb-4 flex items-center justify-center">
+                  <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center">
+                    <ExternalLink className="w-8 h-8 text-primary" />
+                  </div>
+                </div>
+              )}
+
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-primary bg-primary/10 px-3 py-1 rounded-full">
                     {item.category}
                   </span>
+
+                  {item.status === "development" && (
+                    <span className="text-xs font-medium text-yellow-600 bg-yellow-100 px-2 py-1 rounded-full">
+                      🚧 In Development
+                    </span>
+                  )}
                 </div>
-                
-                <h3 className="text-xl font-semibold text-foreground">{item.title}</h3>
-                <p className="text-muted-foreground text-sm">{item.description}</p>
-                
+
+                <h3 className="text-xl font-semibold text-foreground">
+                  {item.title}
+                </h3>
+                <p className="text-muted-foreground text-sm">
+                  {item.description}
+                </p>
+
                 <div className="flex flex-wrap gap-2">
                   {item.tags.map((tag) => (
-                    <span 
+                    <span
                       key={tag}
                       className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-md"
                     >
@@ -98,15 +116,34 @@ const PortfolioSection = () => {
                     </span>
                   ))}
                 </div>
-                
+
                 <div className="flex gap-3 pt-2">
-                  <Button variant="outline" size="sm" className="flex-1">
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    View
-                  </Button>
-                  <Button variant="ghost" size="sm">
-                    <Github className="w-4 h-4" />
-                  </Button>
+                  {item.status === "development" ? (
+                    <Button
+                      disabled
+                      variant="outline"
+                      size="sm"
+                      className="flex-1"
+                    >
+                      Coming Soon
+                    </Button>
+                  ) : (
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="sm"
+                      className="flex-1"
+                    >
+                      <a
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        View
+                      </a>
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>
