@@ -17,15 +17,16 @@ const ContactModal = ({ isOpen, onClose }: ContactModalProps) => {
     name: "",
     email: "",
     description: "",
-    consent: false
+    consent: false,
   });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.consent) {
       toast({
         title: "Consent Required",
@@ -38,29 +39,33 @@ const ContactModal = ({ isOpen, onClose }: ContactModalProps) => {
     setIsSubmitting(true);
 
     try {
-      // Simulate form submission (replace with actual SMTP integration)
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // In a real implementation, you would send the form data to your backend
-      console.log("Form submitted:", formData);
-      
+      const response = await fetch("http://localhost:4000/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData), // send only form data
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send email");
+      }
+
       setIsSubmitted(true);
       toast({
         title: "Message Sent!",
-        description: "Thank you for your inquiry. I'll get back to you within 24 hours.",
+        description:
+          "Thank you for your inquiry. I'll get back to you within 24 hours.",
       });
 
-      // Reset form after successful submission
       setTimeout(() => {
         setFormData({ name: "", email: "", description: "", consent: false });
         setIsSubmitted(false);
         onClose();
       }, 3000);
-
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to send message. Please try again or contact me directly.",
+        description:
+          "Failed to send message. Please try again or contact me directly.",
         variant: "destructive",
       });
     } finally {
@@ -69,7 +74,7 @@ const ContactModal = ({ isOpen, onClose }: ContactModalProps) => {
   };
 
   const handleInputChange = (field: string, value: string | boolean) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   if (!isOpen) return null;
@@ -86,13 +91,16 @@ const ContactModal = ({ isOpen, onClose }: ContactModalProps) => {
               Message Sent Successfully!
             </h3>
             <p className="text-muted-foreground">
-              Thank you for reaching out. I'll review your project details and get back to you within 24 hours.
+              Thank you for reaching out. I'll review your project details and
+              get back to you within 24 hours.
             </p>
           </div>
         ) : (
           <>
             <div className="flex items-center justify-between p-6 border-b border-border/50">
-              <h2 className="text-xl font-semibold text-foreground">Contact Me</h2>
+              <h2 className="text-xl font-semibold text-foreground">
+                Contact Me
+              </h2>
               <Button variant="ghost" size="sm" onClick={onClose}>
                 <X className="w-5 h-5" />
               </Button>
@@ -100,7 +108,10 @@ const ContactModal = ({ isOpen, onClose }: ContactModalProps) => {
 
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
-                <Label htmlFor="name" className="text-sm font-medium text-foreground">
+                <Label
+                  htmlFor="name"
+                  className="text-sm font-medium text-foreground"
+                >
                   Real Name *
                 </Label>
                 <Input
@@ -115,7 +126,10 @@ const ContactModal = ({ isOpen, onClose }: ContactModalProps) => {
               </div>
 
               <div>
-                <Label htmlFor="email" className="text-sm font-medium text-foreground">
+                <Label
+                  htmlFor="email"
+                  className="text-sm font-medium text-foreground"
+                >
                   Email Address *
                 </Label>
                 <Input
@@ -130,13 +144,18 @@ const ContactModal = ({ isOpen, onClose }: ContactModalProps) => {
               </div>
 
               <div>
-                <Label htmlFor="description" className="text-sm font-medium text-foreground">
+                <Label
+                  htmlFor="description"
+                  className="text-sm font-medium text-foreground"
+                >
                   Project Description *
                 </Label>
                 <Textarea
                   id="description"
                   value={formData.description}
-                  onChange={(e) => handleInputChange("description", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("description", e.target.value)
+                  }
                   placeholder="Describe your project, requirements, timeline, and budget expectations..."
                   rows={5}
                   required
@@ -151,24 +170,32 @@ const ContactModal = ({ isOpen, onClose }: ContactModalProps) => {
                     <Checkbox
                       id="consent"
                       checked={formData.consent}
-                      onCheckedChange={(checked) => handleInputChange("consent", checked as boolean)}
+                      onCheckedChange={(checked) =>
+                        handleInputChange("consent", checked as boolean)
+                      }
                       className="mt-1"
                     />
-                    <Label 
-                      htmlFor="consent" 
+                    <Label
+                      htmlFor="consent"
                       className="text-sm text-amber-800 leading-relaxed cursor-pointer"
                     >
-                      I understand that payment must be made after the work is completed. 
-                      Failure to comply may result in legal action. *
+                      I understand that payment must be made after the work is
+                      completed. Failure to comply may result in legal action. *
                     </Label>
                   </div>
                 </div>
               </div>
 
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="gradient-button w-full"
-                disabled={isSubmitting || !formData.name || !formData.email || !formData.description || !formData.consent}
+                disabled={
+                  isSubmitting ||
+                  !formData.name ||
+                  !formData.email ||
+                  !formData.description ||
+                  !formData.consent
+                }
               >
                 {isSubmitting ? (
                   <>
@@ -177,14 +204,14 @@ const ContactModal = ({ isOpen, onClose }: ContactModalProps) => {
                   </>
                 ) : (
                   <>
-                    <Send className="w-4 h-4 mr-2" />
-                    Send Message
+                    <Send className="w-4 h-4 mr-2" /> Send Message
                   </>
                 )}
               </Button>
 
               <p className="text-xs text-muted-foreground text-center">
-                By submitting this form, you agree to be contacted regarding your project inquiry.
+                By submitting this form, you agree to be contacted regarding
+                your project inquiry.
               </p>
             </form>
           </>
