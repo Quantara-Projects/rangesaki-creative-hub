@@ -39,10 +39,10 @@ const ContactModal = ({ isOpen, onClose }: ContactModalProps) => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("http://localhost:4000/send-email", {
+      const response = await fetch("/.netlify/functions/send-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData), // send only form data
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
