@@ -1,73 +1,49 @@
-# Welcome to your Lovable project
+## 🔒 RangeSaki's Private Portfolio (Owner-Only Access)
+## Project Overview
+Title: RangeSaki Roblox Scripter & UI Designer | Professional Portfolio
+Access Level: 🔒 Private (Only the owner can edit files)
 
-## Project info
+## 🔐 How to Maintain Ownership Control
+This portfolio is hosted on a private repository to ensure only you can modify files. Here’s how to manage it:
 
-**URL**: https://lovable.dev/projects/44e754a4-d1d9-420e-85f7-e37f491b8b8f
+## For the Project Owner:
+Edit Locally
+Clone the private repo to your machine using your preferred IDE.
 
-## How can I edit this code?
+bash
 
-There are several ways of editing your application.
+# Step 1: Clone the private repository  
+git clone <PRIVATE_GIT_URL>  
 
-**Use Lovable**
+# Step 2: Navigate to the project directory  
+cd <YOUR_PROJECT_NAME>  
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/44e754a4-d1d9-420e-85f7-e37f491b8b8f) and start prompting.
+# Step 3: Install dependencies  
+npm install  
 
-Changes made via Lovable will be committed automatically to this repo.
+# Step 4: Run the development server  
+npm run dev  
+Deploy Updates
+Push changes to the private repo and deploy via your preferred service (e.g., Vercel, Netlify, or a self-hosted server).
 
-**Use your preferred IDE**
+🛠 Technologies Used
+This portfolio uses modern tools to showcase your Roblox expertise:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Framework: React (Vite + TypeScript)
+Styling: Tailwind CSS & shadcn-ui
+Hosting: Self-hosted (or platform of choice)
+🌐 How to Share Your Work Publicly
+To make your portfolio visible:
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Deploy the project using a service like Vercel or Netlify.
+Share the public deployment link with clients, recruiters, or collaborators.
+📌 Connect a Custom Domain (Optional)
+To brand your portfolio:
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/44e754a4-d1d9-420e-85f7-e37f491b8b8f) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Deploy the project to a hosting provider that supports custom domains.
+Follow your host’s instructions to map a domain (e.g., rangesaki.com).
+⚠️ Security Notes
+Private Repo: Ensure your Git repository is set to private (e.g., GitHub Private Repo).
+No Collaborator Access: Only you have access to the private key or deployment credentials.
+No Third-Party Edits: No external tools (like Lovable) are used, ensuring full control.
+Built with React & Tailwind — a secure, owner-only portfolio for professionals.
