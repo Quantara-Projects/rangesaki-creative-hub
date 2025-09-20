@@ -1,6 +1,7 @@
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import rangeSakiAvatar from "@/assets/rangesaki-avatar.png";
+import { useState, useEffect } from "react";
 
 const PortfolioSection = () => {
   const portfolioItems = [
@@ -49,6 +50,41 @@ const PortfolioSection = () => {
       link: "https://rangesaki.netlify.app/",
     },
   ];
+
+  // Ratings state with localStorage
+  const [reviews, setReviews] = useState([]);
+  const [name, setName] = useState("");
+  const [rating, setRating] = useState(0);
+  const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    const stored = localStorage.getItem("portfolio-reviews");
+    if (stored) setReviews(JSON.parse(stored));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("portfolio-reviews", JSON.stringify(reviews));
+  }, [reviews]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!name || rating === 0 || !description) return;
+    const newReview = { name, rating, description };
+    setReviews([...reviews, newReview]);
+    setName("");
+    setRating(0);
+    setDescription("");
+  };
+
+  // --- Fix for average rating: compute numeric average, a display string, and a rounded value for star fill ---
+  const avg =
+    reviews.length > 0
+      ? reviews.reduce((acc, r) => acc + Number(r.rating || 0), 0) /
+        reviews.length
+      : 0;
+  const averageRating = Number.isFinite(avg) ? avg : 0; // numeric avg
+  const averageRatingDisplay = averageRating.toFixed(1); // string for UI display
+  const averageRatingRounded = Math.round(averageRating); // integer for filling stars
 
   return (
     <section id="portfolio" className="py-16 px-4 sm:px-6 lg:px-8">
@@ -146,6 +182,91 @@ const PortfolioSection = () => {
                   )}
                 </div>
               </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Ratings Section */}
+        <div className="text-center mt-20">
+          <h3 className="text-2xl font-bold mb-2">Client Ratings</h3>
+          <div className="flex justify-center items-center mb-4">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                className={`w-6 h-6 ${
+                  i < averageRatingRounded ? "text-yellow-400" : "text-gray-300"
+                }`}
+                fill={i < averageRatingRounded ? "currentColor" : "none"}
+              />
+            ))}
+          </div>
+          <p className="text-muted-foreground mb-6">
+            Average Rating: {averageRatingDisplay} / 5 ({reviews.length} review
+            {reviews.length !== 1 ? "s" : ""})
+          </p>
+        </div>
+
+        {/* Review Form */}
+        <form
+          onSubmit={handleSubmit}
+          className="max-w-lg mx-auto bg-white/50 p-6 rounded-2xl shadow-lg mb-12"
+        >
+          <h4 className="text-lg font-semibold mb-4">Leave a Review</h4>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Your Name"
+            className="w-full p-2 border rounded-lg mb-4"
+          />
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Write about your experience..."
+            className="w-full p-2 border rounded-lg mb-4"
+            rows="3"
+          />
+
+          <div className="flex items-center mb-4">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                className={`w-6 h-6 cursor-pointer ${
+                  i < rating ? "text-yellow-400" : "text-gray-300"
+                }`}
+                fill={i < rating ? "currentColor" : "none"}
+                onClick={() => setRating(i + 1)}
+              />
+            ))}
+          </div>
+
+          <button
+            type="submit"
+            className="bg-primary text-white px-4 py-2 rounded-lg hover:opacity-80"
+          >
+            Submit Review
+          </button>
+        </form>
+
+        {/* Review List */}
+        <div className="max-w-2xl mx-auto space-y-6">
+          {reviews.map((review, idx) => (
+            <div key={idx} className="p-4 bg-white/50 rounded-xl shadow">
+              <div className="flex items-center mb-2">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className={`w-5 h-5 ${
+                      i < review.rating ? "text-yellow-400" : "text-gray-300"
+                    }`}
+                    fill={i < review.rating ? "currentColor" : "none"}
+                  />
+                ))}
+              </div>
+              <p className="font-semibold">{review.name}</p>
+              <p className="text-muted-foreground text-sm">
+                {review.description}
+              </p>
             </div>
           ))}
         </div>
