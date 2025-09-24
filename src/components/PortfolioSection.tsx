@@ -1,9 +1,10 @@
+import { useState, useEffect } from "react";
 import { ExternalLink, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import rangeSakiAvatar from "@/assets/rangesaki-avatar.png";
-import { useState, useEffect } from "react";
 
 const PortfolioSection = () => {
+  // --- Portfolio Items ---
   const portfolioItems = [
     {
       id: 1,
@@ -51,53 +52,60 @@ const PortfolioSection = () => {
     },
   ];
 
-// Ratings state with backend API
-const [reviews, setReviews] = useState([]);
-const [name, setName] = useState("");
-const [rating, setRating] = useState(0);
-const [description, setDescription] = useState("");
+  // --- Ratings State with Backend API ---
+  const [reviews, setReviews] = useState([]);
+  const [name, setName] = useState("");
+  const [rating, setRating] = useState(0);
+  const [description, setDescription] = useState("");
 
-useEffect(() => {
-  fetch("http://localhost:4000/reviews")
-    .then((res) => res.json())
-    .then((data) => setReviews(data))
-    .catch((err) => console.error("Fetch error:", err));
-}, []);
+  // Fetch reviews from backend
+  useEffect(() => {
+    fetch("http://localhost:4000/reviews")
+      .then((res) => res.json())
+      .then((data) => setReviews(data))
+      .catch((err) => console.error("Fetch error:", err));
+  }, []);
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (!name || rating === 0 || !description) return;
+  // Handle review submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!name || rating === 0 || !description) return;
 
-  const newReview = { name, rating, description };
+    const newReview = { name, rating, description };
 
-  try {
-    const res = await fetch("http://localhost:4000/reviews", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newReview),
-    });
-    const saved = await res.json();
-    setReviews([saved, ...reviews]); // prepend newest review
-    setName("");
-    setRating(0);
-    setDescription("");
-  } catch (err) {
-    console.error("Submit error:", err);
-  }
-};
-  
-  // --- Fix for average rating: compute numeric average, a display string, and a rounded value for star fill ---
-const avg =
-  reviews.length > 0
-    ? reviews.reduce((acc, r) => acc + Number(r.rating || 0), 0) / reviews.length
-    : 0;
- const averageRating = Number.isFinite(avg) ? avg : 0;
-const averageRatingDisplay = averageRating.toFixed(1);
-const averageRatingRounded = Math.round(averageRating);
+    try {
+      const res = await fetch("http://localhost:4000/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newReview),
+      });
 
+      const saved = await res.json();
+      setReviews([saved, ...reviews]); // prepend newest review
+      setName("");
+      setRating(0);
+      setDescription("");
+    } catch (err) {
+      console.error("Submit error:", err);
+    }
+  };
+
+  // --- Average Rating Calculation ---
+  const avg =
+    reviews.length > 0
+      ? reviews.reduce((acc, r) => acc + Number(r.rating || 0), 0) /
+        reviews.length
+      : 0;
+
+  const averageRating = Number.isFinite(avg) ? avg : 0;
+  const averageRatingDisplay = averageRating.toFixed(1);
+  const averageRatingRounded = Math.round(averageRating);
+
+  // --- Render ---
   return (
     <section id="portfolio" className="py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
+        {/* Portfolio Section */}
         <div className="text-center mb-16 animate-fade-in-up">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             My Work
@@ -108,6 +116,7 @@ const averageRatingRounded = Math.round(averageRating);
           </p>
         </div>
 
+        {/* Portfolio Items */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {portfolioItems.map((item, index) => (
             <div
@@ -115,6 +124,7 @@ const averageRatingRounded = Math.round(averageRating);
               className="portfolio-card animate-fade-in-up"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
+              {/* Image or Placeholder */}
               {item.image && item.image !== "/placeholder.svg" ? (
                 <div className="aspect-video rounded-lg mb-4 overflow-hidden">
                   <img
@@ -131,7 +141,9 @@ const averageRatingRounded = Math.round(averageRating);
                 </div>
               )}
 
+              {/* Item Content */}
               <div className="space-y-3">
+                {/* Category + Status */}
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-primary bg-primary/10 px-3 py-1 rounded-full">
                     {item.category}
@@ -144,6 +156,7 @@ const averageRatingRounded = Math.round(averageRating);
                   )}
                 </div>
 
+                {/* Title + Description */}
                 <h3 className="text-xl font-semibold text-foreground">
                   {item.title}
                 </h3>
@@ -151,6 +164,7 @@ const averageRatingRounded = Math.round(averageRating);
                   {item.description}
                 </p>
 
+                {/* Tags */}
                 <div className="flex flex-wrap gap-2">
                   {item.tags.map((tag) => (
                     <span
@@ -162,6 +176,7 @@ const averageRatingRounded = Math.round(averageRating);
                   ))}
                 </div>
 
+                {/* Button */}
                 <div className="flex gap-3 pt-2">
                   {item.status === "development" ? (
                     <Button
@@ -198,6 +213,8 @@ const averageRatingRounded = Math.round(averageRating);
         {/* Ratings Section */}
         <div className="text-center mt-20">
           <h3 className="text-2xl font-bold mb-2">Client Ratings</h3>
+
+          {/* Average Stars */}
           <div className="flex justify-center items-center mb-4">
             {[...Array(5)].map((_, i) => (
               <Star
@@ -209,6 +226,7 @@ const averageRatingRounded = Math.round(averageRating);
               />
             ))}
           </div>
+
           <p className="text-muted-foreground mb-6">
             Average Rating: {averageRatingDisplay} / 5 ({reviews.length} review
             {reviews.length !== 1 ? "s" : ""})
@@ -221,6 +239,7 @@ const averageRatingRounded = Math.round(averageRating);
           className="max-w-lg mx-auto bg-white/50 p-6 rounded-2xl shadow-lg mb-12"
         >
           <h4 className="text-lg font-semibold mb-4">Leave a Review</h4>
+
           <input
             type="text"
             value={name}
@@ -228,6 +247,7 @@ const averageRatingRounded = Math.round(averageRating);
             placeholder="Your Name"
             className="w-full p-2 border rounded-lg mb-4"
           />
+
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -236,6 +256,7 @@ const averageRatingRounded = Math.round(averageRating);
             rows="3"
           />
 
+          {/* Rating Stars */}
           <div className="flex items-center mb-4">
             {[...Array(5)].map((_, i) => (
               <Star
@@ -257,30 +278,36 @@ const averageRatingRounded = Math.round(averageRating);
           </button>
         </form>
 
-       {/* Review List (Scrollable with backend data) */}
-<div className="max-w-2xl mx-auto">
-  <div className="max-h-80 overflow-y-auto pr-2 space-y-6">
-    {reviews.map((review) => (
-      <div key={review.id} className="p-4 bg-white/50 rounded-xl shadow">
-        <div className="flex items-center mb-2">
-          {[...Array(5)].map((_, i) => (
-            <Star
-              key={i}
-              className={`w-5 h-5 ${
-                i < review.rating ? "text-yellow-400" : "text-gray-300"
-              }`}
-              fill={i < review.rating ? "currentColor" : "none"}
-            />
-          ))}
+        {/* Review List (Scrollable with backend data) */}
+        <div className="max-w-2xl mx-auto">
+          <div className="max-h-80 overflow-y-auto pr-2 space-y-6">
+            {reviews.map((review) => (
+              <div
+                key={review.id}
+                className="p-4 bg-white/50 rounded-xl shadow"
+              >
+                {/* Review Stars */}
+                <div className="flex items-center mb-2">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-5 h-5 ${
+                        i < review.rating ? "text-yellow-400" : "text-gray-300"
+                      }`}
+                      fill={i < review.rating ? "currentColor" : "none"}
+                    />
+                  ))}
+                </div>
+
+                <p className="font-semibold">{review.name}</p>
+                <p className="text-muted-foreground text-sm">
+                  {review.description}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
-        <p className="font-semibold">{review.name}</p>
-        <p className="text-muted-foreground text-sm">
-          {review.description}
-        </p>
       </div>
-    ))}
-  </div>
-</div>
     </section>
   );
 };
