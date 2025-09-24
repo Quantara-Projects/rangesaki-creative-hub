@@ -51,40 +51,49 @@ const PortfolioSection = () => {
     },
   ];
 
-  // Ratings state with localStorage
-  const [reviews, setReviews] = useState([]);
-  const [name, setName] = useState("");
-  const [rating, setRating] = useState(0);
-  const [description, setDescription] = useState("");
+// Ratings state with backend API
+const [reviews, setReviews] = useState([]);
+const [name, setName] = useState("");
+const [rating, setRating] = useState(0);
+const [description, setDescription] = useState("");
 
-  useEffect(() => {
-    const stored = localStorage.getItem("portfolio-reviews");
-    if (stored) setReviews(JSON.parse(stored));
-  }, []);
+useEffect(() => {
+  fetch("http://localhost:4000/reviews")
+    .then((res) => res.json())
+    .then((data) => setReviews(data))
+    .catch((err) => console.error("Fetch error:", err));
+}, []);
 
-  useEffect(() => {
-    localStorage.setItem("portfolio-reviews", JSON.stringify(reviews));
-  }, [reviews]);
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!name || rating === 0 || !description) return;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!name || rating === 0 || !description) return;
-    const newReview = { name, rating, description };
-    setReviews([...reviews, newReview]);
+  const newReview = { name, rating, description };
+
+  try {
+    const res = await fetch("http://localhost:4000/reviews", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newReview),
+    });
+    const saved = await res.json();
+    setReviews([saved, ...reviews]); // prepend newest review
     setName("");
     setRating(0);
     setDescription("");
-  };
-
+  } catch (err) {
+    console.error("Submit error:", err);
+  }
+};
+  
   // --- Fix for average rating: compute numeric average, a display string, and a rounded value for star fill ---
-  const avg =
-    reviews.length > 0
-      ? reviews.reduce((acc, r) => acc + Number(r.rating || 0), 0) /
-        reviews.length
-      : 0;
-  const averageRating = Number.isFinite(avg) ? avg : 0; // numeric avg
-  const averageRatingDisplay = averageRating.toFixed(1); // string for UI display
-  const averageRatingRounded = Math.round(averageRating); // integer for filling stars
+const avg =
+  reviews.length > 0
+    ? reviews.reduce((acc, r) => acc + Number(r.rating || 0), 0) / reviews.length
+    : 0;
+ const averageRating = Number.isFinite(avg) ? avg : 0;
+const averageRatingDisplay = averageRating.toFixed(1);
+const averageRatingRounded = Math.round(averageRating);
 
   return (
     <section id="portfolio" className="py-16 px-4 sm:px-6 lg:px-8">
@@ -248,29 +257,30 @@ const PortfolioSection = () => {
           </button>
         </form>
 
-        {/* Review List */}
-        <div className="max-w-2xl mx-auto space-y-6">
-          {reviews.map((review, idx) => (
-            <div key={idx} className="p-4 bg-white/50 rounded-xl shadow">
-              <div className="flex items-center mb-2">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`w-5 h-5 ${
-                      i < review.rating ? "text-yellow-400" : "text-gray-300"
-                    }`}
-                    fill={i < review.rating ? "currentColor" : "none"}
-                  />
-                ))}
-              </div>
-              <p className="font-semibold">{review.name}</p>
-              <p className="text-muted-foreground text-sm">
-                {review.description}
-              </p>
-            </div>
+       {/* Review List (Scrollable with backend data) */}
+<div className="max-w-2xl mx-auto">
+  <div className="max-h-80 overflow-y-auto pr-2 space-y-6">
+    {reviews.map((review) => (
+      <div key={review.id} className="p-4 bg-white/50 rounded-xl shadow">
+        <div className="flex items-center mb-2">
+          {[...Array(5)].map((_, i) => (
+            <Star
+              key={i}
+              className={`w-5 h-5 ${
+                i < review.rating ? "text-yellow-400" : "text-gray-300"
+              }`}
+              fill={i < review.rating ? "currentColor" : "none"}
+            />
           ))}
         </div>
+        <p className="font-semibold">{review.name}</p>
+        <p className="text-muted-foreground text-sm">
+          {review.description}
+        </p>
       </div>
+    ))}
+  </div>
+</div>
     </section>
   );
 };
