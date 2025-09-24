@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ExternalLink, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import rangeSakiAvatar from "@/assets/rangesaki-avatar.png";
@@ -58,6 +58,8 @@ const PortfolioSection = () => {
   const [rating, setRating] = useState(0);
   const [description, setDescription] = useState("");
 
+  const scrollRef = useRef(null); // ✅ reference to scrollable container
+
   // Fetch reviews from backend
   useEffect(() => {
     fetch("/.netlify/functions/reviews")
@@ -65,6 +67,13 @@ const PortfolioSection = () => {
       .then((data) => setReviews(data))
       .catch((err) => console.error("Fetch error:", err));
   }, []);
+
+  // Auto scroll when new review is added
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0; // ✅ scroll to top (newest first)
+    }
+  }, [reviews]);
 
   // Handle review submission
   const handleSubmit = async (e) => {
@@ -81,7 +90,7 @@ const PortfolioSection = () => {
       });
 
       const saved = await res.json();
-      setReviews([saved, ...reviews]); // prepend newest review
+      setReviews((prev) => [saved, ...prev]); // ✅ prepend new review
       setName("");
       setRating(0);
       setDescription("");
@@ -278,9 +287,12 @@ const PortfolioSection = () => {
           </button>
         </form>
 
-        {/* Review List (Scrollable with backend data) */}
+        {/* Reviews List */}
         <div className="max-w-2xl mx-auto">
-          <div className="max-h-80 overflow-y-auto pr-2 space-y-6">
+          <div
+            ref={scrollRef} // ✅ attach scroll ref
+            className="max-h-80 overflow-y-auto pr-2 space-y-6"
+          >
             {reviews.map((review) => (
               <div
                 key={review.id}
