@@ -60,7 +60,7 @@ const PortfolioSection = () => {
 
   // Fetch reviews from backend
   useEffect(() => {
-    fetch("http://localhost:4000/reviews")
+    fetch("/.netlify/functions/reviews")
       .then((res) => res.json())
       .then((data) => setReviews(data))
       .catch((err) => console.error("Fetch error:", err));
@@ -74,7 +74,7 @@ const PortfolioSection = () => {
     const newReview = { name, rating, description };
 
     try {
-      const res = await fetch("http://localhost:4000/reviews", {
+      const res = await fetch("/.netlify/functions/reviews", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newReview),
